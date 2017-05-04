@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!--
+  Original Design: Spectral by HTML5 UP
+    html5up.net | @n33co
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+  Jekyll build mod
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Devoxx4Kids Polska{% endblock %}</title>
+    <meta name="description" content="Devoxx4Kids to wspaniała szansa dla najmłodszych na pierwszy kontakt z programowaniem poprzez zabawę. Celem naszego wydarzenia jest pokazanie najmłodszemu pokoleniu, jak sterować i bawić się komputerami.  Mamy również nadzieję rozpowszechnić wśród nauczycieli oraz rodziców bogactwo dostępnych za darmo  materiałów i narzędzi wspomagających edukację komputerową. Devoxx4Kids Polska to pierwsza, bezpłatna  i otwarta konferencja programistyczną dla dzieci będąca częścią światowego ruchu Devoxx4Kids">
+    <!--[if lte IE 8]><script src="./js/ie/html5shiv.js"></script><![endif]-->
+    <link rel="canonical" href="http://devoxx4kids.pl/rejestracja.html">
+    <link rel="stylesheet" href="./css/rejestracja.css" />
+    <!--[if lte IE 8]><link rel="stylesheet" href="./css/ie8.css" /><![endif]-->
+    <!--[if lte IE 9]><link rel="stylesheet" href="./css/ie9.css" /><![endif]-->
+    <meta property="og:title" content="Devoxx4Kids Polska - Rejestracja - Poznań" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./images/d4k-splash_btn.png" />
+    <meta property="og:locale" content="pl_PL" />
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+<!-- Page Wrapper -->
+<div id="page-wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <h1>
+            <a id="logo" href="http://devoxx4kids.pl/"><img alt="devoxx4kids logo" src="./images/d4k-splash_btn.png"></a>
+            <a id="title" href="http://devoxx4kids.pl/">Devoxx4Kids Polska</a>
+        </h1>
+    </header>
+
+
+    <article id="main">
+
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+
+    </article>
+
+    <footer id="footer">
+        <ul class="icons">
+
+
+
+            <li><a target="_blank" href="https://twitter.com/Devoxx4KidsPL" class="icon fa-twitter"><span class="label">twitter</span></a></li>
+
+
+
+
+
+            <li><a target="_blank" href="https://github.com/devoxx4kidspl" class="icon fa-github"><span class="label">github</span></a></li>
+
+
+
+
+
+            <li><a target="_blank" href="https://www.facebook.com/devoxx4kidspl" class="icon fa-facebook"><span class="label">facebook</span></a></li>
+
+
+
+        </ul>
+        <ul class="copyright">
+            <li>&copy;
+
+
+                2014 -
+
+                2017
+                <a href="/index.html" title="Devoxx4Kids Polska"><span>Devoxx4Kids Polska</span></a></li>
+            <li>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a></li>
+            <li>Built with: <a href="http://jekyllrb.com" target="_blank">Jekyll</a></li>
+        </ul>
+    </footer>
+    <!--[if lte IE 8]><script src="./js/ie/respond.min.js"></script><![endif]-->
+</div>
+<script src="./js/rejestracja.js"></script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-76830614-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+</body>
+</html>

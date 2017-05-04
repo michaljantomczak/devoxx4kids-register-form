@@ -1,0 +1,19 @@
+version: "2"
+services:
+  d4k_httpd:
+    build: httpd
+    ports:
+      - 2057:80
+    volumes:
+      - ../:/var/www/html
+    links:
+      - d4k_pgsql
+    environment:
+      - XDEBUG_CONFIG='remote_host=192.168.0.52'
+  d4k_pgsql:
+    build: pgsql
+    environment:
+      - DBNAME='db'
+      - DBUSER='root:password'
+    ports:
+      - 3057:5432
