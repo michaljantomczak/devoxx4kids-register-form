@@ -25,19 +25,20 @@ class BabysitterType extends AbstractType
             ->add('lastName')
             ->add('email')
             ->add('telephone')
-            ->add('allowTerms')
-            ->add('allowMarketing')
+            ->add('allowTerms',null,[
+                'label'=>'Wyrażam zgodę na przetwarzanie moich danych osobowych przez Fundację Coder Dojo Polska z siedzibą w Zambrowie (ul. Papieża Jana Pawła II 12A/34, 18-300 Zambrów), w celu udziału w warsztatach programistycznych dla dzieci Devoxx4Kids.',
+                'required'=>true,
+            ])
+            ->add('allowMarketing',null,[
+                'label'=>'Wyrażam zgodę na przesyłanie mi przez  Fundację Coder Dojo Polska za pomocą środków komunikacji elektronicznej informacji o przyszłych warsztatach (np. newsletterów).',
+            ])
             ->add('countChild',ChoiceType::class,[
                 'placeholder'=>'Select...',
                 'required'=>true,
                 'choices'=>$countChildChoices,
                 'mapped'=>false,
             ])
-            ->add('members',CollectionType::class,[
-                'allow_add'=>true,
-                'required'=>true,
-                'entry_type'=>MemberType::class,
-            ]);
+            ->add('members',MemberCollectionType::class);
     }
 
     /**

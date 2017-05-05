@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Babysitter;
 use AppBundle\Entity\City;
+use AppBundle\Entity\Member;
 use AppBundle\Form\BabysitterType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,6 +23,7 @@ class DefaultController extends Controller
     {
         $babysitter=new Babysitter();
         $babysitter->setCity($city);
+        $babysitter->addMember(new Member());
         $form=$this->createForm(BabysitterType::class,$babysitter);
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [

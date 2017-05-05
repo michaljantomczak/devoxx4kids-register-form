@@ -283,5 +283,12 @@ class Babysitter
         return $this->members;
     }
 
+    /**
+     * @param Member $member
+     */
+    public function addMember(Member $member){
+        $this->members->add($member);
+    }
+
 }
 
