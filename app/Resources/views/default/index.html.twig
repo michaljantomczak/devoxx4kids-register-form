@@ -3,13 +3,18 @@
 {% form_theme form _self %}
 
 {% block checkbox_row %}
-    {{ form_widget(form) }}
-    {{ form_label(form) }}
+    <div class="12u">
+
+        {{ form_widget(form) }}
+        {{ form_label(form) }}
+    </div>
 {% endblock %}
 
 {% block form_row %}
-    {{ form_label(form) }}
-    {{ form_widget(form) }}
+    <div class="12u">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+    </div>
 {% endblock %}
 
 {% block form %}
@@ -27,6 +32,7 @@
 {% endblock %}
 
 {% block member_collection_widget %}
+    <hr/>
     <fieldset class="12u$">
         {% for field in form %}
             <h3>{{ 'Member'|trans }}</h3>
@@ -46,28 +52,14 @@
             <div class="row uniform">
                 <fieldset class="12u$">
                     <h3>{{ 'Babysitter'|trans }}</h3>
-                    <div class="6u 12u$(xsmall)">
                         {{ form_row(form.firstName) }}
-                    </div>
-                    <div class="6u 12u$(xsmall)">
                         {{ form_row(form.lastName) }}
-                    </div>
-                    <div class="6u 12u$(xsmall)">
                         {{ form_row(form.email) }}
-                    </div>
-                    <div class="6u 12u$(xsmall)">
                         {{ form_row(form.telephone) }}
-                    </div>
-                    <div class="6u 12u$(xsmall)">
                         {{ form_row(form.allowTerms) }}
-                    </div>
-                    <div class="6u 12u$(xsmall)">
                         {{ form_row(form.allowMarketing) }}
-                    </div>
-                    <div class="6u 12u$(xsmall)">
                         {{ form_row(form.countChild) }}
-                    </div>
-                    {{ form_row(form.members) }}
+                        {{ form_row(form.members) }}
 
                     {#<ul class="actions">#}
                     {#<li>#}

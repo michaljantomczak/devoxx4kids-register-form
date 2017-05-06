@@ -19,16 +19,21 @@ class DefaultController extends Controller
      * @param City $city
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(City $city)
+    public function indexAction(City $city,Request $request)
     {
         $babysitter=new Babysitter();
         $babysitter->setCity($city);
         $babysitter->addMember(new Member());
         $form=$this->createForm(BabysitterType::class,$babysitter);
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'form' => $form->createView(),
-            'city'=>$city,
-        ]);
+        $form->handleRequest($request);
+        if(!$form->isValid()){
+            return $this->render('default/index.html.twig', [
+                'form' => $form->createView(),
+                'city'=>$city,
+            ]);
+        }
+
+        $data=$form->getData();
+        //TODO
     }
 }

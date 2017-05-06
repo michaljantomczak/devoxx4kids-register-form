@@ -2,6 +2,8 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Food;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,8 +22,11 @@ class MemberType extends AbstractType
             ->add('bornAt',DateType::class,[
                 'widget'=>'single_text',
             ])
-            ->add('prohibitedFood',FoodCollectionType::class)
-            ->add('babysitter')
+            ->add('prohibitedFood',EntityType::class,[
+                'class'=>Food::class,
+                'expanded'=>true,
+                'multiple'=>true,
+            ])
             ->add('tShirtSize');
     }
     

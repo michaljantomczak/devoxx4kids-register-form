@@ -1619,6 +1619,7 @@ body.is-mobile #main > header {
     .wrapper.style5 input[type="text"],
     .wrapper.style5 input[type="password"],
     .wrapper.style5 input[type="email"],
+    .wrapper.style5 input[type="date"],
     .wrapper.style5 select,
     .wrapper.style5 textarea, .sponsors.style5 input[type="text"],
     .sponsors.style5 input[type="password"],
@@ -1917,6 +1918,7 @@ label {
 input[type="text"],
 input[type="password"],
 input[type="email"],
+input[type="date"],
 select,
 textarea {
   -moz-appearance: none;
@@ -1935,12 +1937,14 @@ textarea {
   input[type="text"]:invalid,
   input[type="password"]:invalid,
   input[type="email"]:invalid,
+  input[type="date"]:invalid,
   select:invalid,
   textarea:invalid {
     box-shadow: none; }
   input[type="text"]:focus,
   input[type="password"]:focus,
   input[type="email"]:focus,
+  input[type="date"]:focus,
   select:focus,
   textarea:focus {
     box-shadow: 0 0 0 2px #00577f; }
@@ -1977,6 +1981,7 @@ textarea {
 input[type="text"],
 input[type="password"],
 input[type="email"],
+input[type="date"],
 select {
   height: 2.75em; }
 
