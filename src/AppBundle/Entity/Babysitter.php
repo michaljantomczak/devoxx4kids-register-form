@@ -287,6 +287,7 @@ class Babysitter
      * @param Member $member
      */
     public function addMember(Member $member){
+        $member->setBabysitter($this);
         $this->members->add($member);
     }
 

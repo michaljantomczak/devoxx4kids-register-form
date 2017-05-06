@@ -124,5 +124,13 @@ class TShirtSize
     {
         return $this->createdAt;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
 

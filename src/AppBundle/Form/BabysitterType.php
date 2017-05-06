@@ -5,7 +5,9 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BabysitterType extends AbstractType
@@ -38,7 +40,8 @@ class BabysitterType extends AbstractType
                 'choices'=>$countChildChoices,
                 'mapped'=>false,
             ])
-            ->add('members',MemberCollectionType::class);
+            ->add('members',MemberCollectionType::class)
+            ->add('submit',SubmitType::class);
     }
 
     /**

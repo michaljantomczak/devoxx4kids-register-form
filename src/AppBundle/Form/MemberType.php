@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Food;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,7 +28,21 @@ class MemberType extends AbstractType
                 'expanded'=>true,
                 'multiple'=>true,
             ])
-            ->add('tShirtSize');
+            ->add('tShirtSize',null,[
+                'required'=>true,
+                'placeholder'=>'Select...',
+            ]);
+
+        $builder->get('prohibitedFood')
+            ->addModelTransformer(new CallbackTransformer(function($encode){
+                return $encode;
+            },function ($decode){
+                $data=[];
+                foreach($decode as $item){
+                    $data[]=(string)$item;
+                }
+                return implode(', ',$data);
+            }));
     }
     
     /**

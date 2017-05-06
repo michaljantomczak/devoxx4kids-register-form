@@ -25,7 +25,7 @@ class Member
      * @var Babysitter
      *
      * @ORM\ManyToOne(targetEntity="Babysitter",inversedBy="members")
-     * @ORM\JoinColumn(name="babysitter_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
+     * @ORM\JoinColumn(name="babysitter_id", referencedColumnName="id",nullable=false,onDelete="CASCADE",nullable=false)
      */
     private $babysitter;
 
@@ -54,7 +54,7 @@ class Member
      * @var TShirtSize
      *
      * @ORM\ManyToOne(targetEntity="TShirtSize")
-     * @ORM\JoinColumn(name="t_shirt_size_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
+     * @ORM\JoinColumn(name="t_shirt_size_id", referencedColumnName="id",nullable=false,onDelete="CASCADE",nullable=false)
      */
     private $tShirtSize;
 

@@ -40,6 +40,21 @@
         {% endfor %}
     </fieldset>
 {% endblock %}
+
+{% block button_row %}
+    <hr/>
+    <div class="12u$">
+        <ul class="actions">
+            <li>{{ form_widget(form) }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{#{% block button_widget %}#}
+    {#{{ parent() }}#}
+    {#{% set attr = attr|merge({class: (attr.class|default('') ~ ' special')|trim}) %}#}
+{#{% endblock %}#}
+
 {% block body %}
     <header>
         <h2>Rejestracja - {{ city.name }}</h2>
@@ -60,6 +75,7 @@
                         {{ form_row(form.allowMarketing) }}
                         {{ form_row(form.countChild) }}
                         {{ form_row(form.members) }}
+                        {{ form_row(form.submit) }}
 
                     {#<ul class="actions">#}
                     {#<li>#}
@@ -117,13 +133,8 @@
                     {#<textarea name="demo-message" id="demo-message" placeholder="Enter your message"#}
                     {#rows="6"></textarea>#}
                     {#</div>#}
-                    <div class="12u$">
-                        <ul class="actions">
-                            <li><input type="submit" value="Send Message" class="special"></li>
-                            <li><input type="reset" value="Reset"></li>
-                        </ul>
-                    </div>
             </div>
+            {{ form_rest(form) }}
             </form>
         </div>
 

@@ -17,6 +17,7 @@ class DefaultController extends Controller
      * @Route("/{city}", name="homepage")
      * @ParamConverter("city", class="AppBundle:City", options={"mapping": {"city": "slug"}})
      * @param City $city
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(City $city,Request $request)
@@ -34,6 +35,19 @@ class DefaultController extends Controller
         }
 
         $data=$form->getData();
+        $em=$this->get('doctrine.orm.entity_manager');
+        $em->persist($data);
+        $em->flush();
+
+        return $this->redirect('form_confirm');
         //TODO
+    }
+
+    /**
+     *
+     * @Route("/confirm", name="form_confirm")
+     */
+    public function confirmAction(){
+        return $this->render('default/confirm.html.twig');
     }
 }
