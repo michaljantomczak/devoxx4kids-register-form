@@ -7,8 +7,13 @@
 {% block body %}
 
     <header>
-        <h2>{{ 'Registered success.'|trans }} - {{ city.name }}</h2>
+        <h2>{{ 'Registered success.'|trans }}</h2>
     </header>
+    <div class="wrapper style5">
+        <div class="inner">
+            {{ message }}
+        </div>
+    </div>
 
 {% endblock %}
 
