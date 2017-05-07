@@ -30,7 +30,8 @@ class MemberCollectionType extends AbstractType
             'entry_type'=>MemberType::class,
             'allow_add'=>true,
             'allow_delete'=>true,
-            'required'=>true
+            'required'=>true,
+            'by_reference'=>false,
         ));
     }
 

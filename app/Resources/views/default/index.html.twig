@@ -2,11 +2,22 @@
 
 {% form_theme form _self %}
 
+{% block form_errors %}
+    {% if errors|length > 0 %}
+        <ul class="error">
+            {% for error in errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
+
 {% block checkbox_row %}
     <div class="12u">
 
         {{ form_widget(form) }}
         {{ form_label(form) }}
+        {{ form_errors(form) }}
     </div>
 {% endblock %}
 
@@ -14,6 +25,7 @@
     <div class="12u">
         {{ form_label(form) }}
         {{ form_widget(form) }}
+        {{ form_errors(form) }}
     </div>
 {% endblock %}
 
@@ -65,13 +77,13 @@
 
 {% block body %}
     <header>
-        <h2>Rejestracja - {{ city.name }}</h2>
+        <h2>{{ 'Register'|trans }} - {{ city.name }}</h2>
     </header>
 
     <div class="wrapper style5">
         <div class="inner">
 
-            {{ form_start(form) }}
+            {{ form_start(form,{attr:{novalidate:true}}) }}
             <div class="row uniform">
                 <fieldset class="12u$">
                     <h3>{{ 'Babysitter'|trans }}</h3>

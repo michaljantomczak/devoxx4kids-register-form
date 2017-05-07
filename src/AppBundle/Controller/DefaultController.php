@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/{city}", name="homepage")
+     * @Route("/city-{city}", name="homepage")
      * @ParamConverter("city", class="AppBundle:City", options={"mapping": {"city": "slug"}})
      * @param City $city
      * @param Request $request
@@ -38,7 +38,8 @@ class DefaultController extends Controller
         $em->persist($data);
         $em->flush();
 
-        return $this->redirect('form_confirm');
+        $message=$this->createConfirmMessage($data);
+        return $this->redirectToRoute('form_confirm');
         //TODO
     }
 
@@ -48,5 +49,10 @@ class DefaultController extends Controller
      */
     public function confirmAction(){
         return $this->render('default/confirm.html.twig');
+    }
+
+    private function createConfirmMessage(Babysitter $babysitter)
+    {
+        $message='Dzień Dobry - dziękujemy za rejestrację na warsztaty Devoxx4kids w mieście '.$babysitter->getCity()->getName().'. Uprzejmie informujemy, że;';
     }
 }

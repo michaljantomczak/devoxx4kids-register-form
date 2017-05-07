@@ -89,6 +89,7 @@ class Babysitter
     public function __construct()
     {
         $this->members=new ArrayCollection();
+        $this->setCreatedAt(new \DateTime());
     }
 
     /**
@@ -289,6 +290,14 @@ class Babysitter
     public function addMember(Member $member){
         $member->setBabysitter($this);
         $this->members->add($member);
+    }
+
+    /**
+     * @param Member $member
+     */
+    public function removeMember(Member $member){
+        $member->setBabysitter(null);
+        $this->members->remove($member);
     }
 
 }

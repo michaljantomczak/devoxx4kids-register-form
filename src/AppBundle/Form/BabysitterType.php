@@ -5,10 +5,18 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class BabysitterType extends AbstractType
 {
@@ -23,13 +31,42 @@ class BabysitterType extends AbstractType
         }
 
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('email')
-            ->add('telephone')
+            ->add('firstName',null,[
+                'constraints'=>[
+                    new NotBlank(),
+                ]
+            ])
+            ->add('lastName',null,[
+                'constraints'=>[
+                    new NotBlank(),
+                ]
+            ])
+            ->add('email',EmailType::class,[
+                'constraints'=>[
+                    new NotBlank(),
+                    new Email(),
+                ]
+            ])
+            ->add('telephone',null,[
+                'attr'=>[
+                    'maxlength'=>19,
+                ],
+                'constraints'=>[
+                    new NotBlank(),
+                    new Regex([
+                        'pattern'=>'/^[1-9][0-9]{8}(,[1-9][0-9]{8})*$/',
+                        'message'=>'Invalid phone numbers pattern. Allow: nine numbers. For multiple records please separate by comma. E.G. 123321123,432112345'
+                    ]),
+                    new Length(['max'=>19])
+                ]
+
+            ])
             ->add('allowTerms',null,[
                 'label'=>'Wyrażam zgodę na przetwarzanie moich danych osobowych przez Fundację Coder Dojo Polska z siedzibą w Zambrowie (ul. Papieża Jana Pawła II 12A/34, 18-300 Zambrów), w celu udziału w warsztatach programistycznych dla dzieci Devoxx4Kids.',
                 'required'=>true,
+                'constraints'=>[
+                    new NotBlank(),
+                ]
             ])
             ->add('allowMarketing',null,[
                 'label'=>'Wyrażam zgodę na przesyłanie mi przez  Fundację Coder Dojo Polska za pomocą środków komunikacji elektronicznej informacji o przyszłych warsztatach (np. newsletterów).',
@@ -39,8 +76,15 @@ class BabysitterType extends AbstractType
                 'required'=>true,
                 'choices'=>$countChildChoices,
                 'mapped'=>false,
+                'constraints'=>[
+                    new NotBlank(),
+                ]
             ])
-            ->add('members',MemberCollectionType::class)
+            ->add('members',MemberCollectionType::class,[
+                'constraints'=>[
+                    new Count(['min'=>1,'max'=>5]),
+                ]
+            ])
             ->add('submit',SubmitType::class);
     }
 

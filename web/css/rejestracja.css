@@ -1937,14 +1937,13 @@ textarea {
   input[type="text"]:invalid,
   input[type="password"]:invalid,
   input[type="email"]:invalid,
-  input[type="date"]:invalid,
+  input[type="email"]:invalid,
   select:invalid,
   textarea:invalid {
     box-shadow: none; }
   input[type="text"]:focus,
   input[type="password"]:focus,
   input[type="email"]:focus,
-  input[type="date"]:focus,
   select:focus,
   textarea:focus {
     box-shadow: 0 0 0 2px #00577f; }
@@ -1981,7 +1980,6 @@ textarea {
 input[type="text"],
 input[type="password"],
 input[type="email"],
-input[type="date"],
 select {
   height: 2.75em; }
 
@@ -2270,3 +2268,7 @@ input {
     color: #00f0ff; }
   .icon.style3 {
     color: #76ddff; }
+    .error{
+        list-style: none;
+        color: #ff8e79;
+        font-weight: bold;  }

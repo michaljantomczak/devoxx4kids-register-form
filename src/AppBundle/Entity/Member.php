@@ -72,6 +72,11 @@ class Member
      */
     private $createdAt;
 
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTime());
+    }
+
     /**
      * Get id
      *
