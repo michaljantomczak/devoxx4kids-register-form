@@ -75,7 +75,7 @@ class Babysitter
     /**
      * @var Member[]
      *
-     * @ORM\OneToMany(targetEntity="Babysitter", mappedBy="babysitter")
+     * @ORM\OneToMany(targetEntity="Member", mappedBy="babysitter",cascade={"persist"})
      */
     private $members;
 

@@ -24,7 +24,6 @@ class DefaultController extends Controller
     {
         $babysitter=new Babysitter();
         $babysitter->setCity($city);
-        $babysitter->addMember(new Member());
         $form=$this->createForm(BabysitterType::class,$babysitter);
         $form->handleRequest($request);
         if(!$form->isValid()){

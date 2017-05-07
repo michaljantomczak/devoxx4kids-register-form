@@ -24,7 +24,7 @@ class Member
     /**
      * @var Babysitter
      *
-     * @ORM\ManyToOne(targetEntity="Babysitter",inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="Babysitter",inversedBy="members",cascade={"persist"})
      * @ORM\JoinColumn(name="babysitter_id", referencedColumnName="id",nullable=false,onDelete="CASCADE",nullable=false)
      */
     private $babysitter;

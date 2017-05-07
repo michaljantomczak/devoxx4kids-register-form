@@ -28,22 +28,30 @@
 {% endblock %}
 
 {% block member_collection_row %}
+<div id="{{ form.vars.id }}" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}" class="12u">
     {{ form_widget(form) }}
+</div>
 {% endblock %}
 
 {% block member_collection_widget %}
+    {% for field in form %}
+        {{ form_widget(field) }}
+    {% endfor %}
+{% endblock %}
+
+{% block member_widget %}
     <hr/>
-    <fieldset class="12u$">
+    <fieldset class="12u">
+        <h3>{{ 'Member'|trans }} __index__</h3>
         {% for field in form %}
-            <h3>{{ 'Member'|trans }}</h3>
-            {{ form_widget(field) }}
+            {{ form_row(field) }}
         {% endfor %}
     </fieldset>
 {% endblock %}
 
 {% block button_row %}
-    <hr/>
-    <div class="12u$">
+    <div class="12u">
+        <hr/>
         <ul class="actions">
             <li>{{ form_widget(form) }}</li>
         </ul>
@@ -74,65 +82,9 @@
                         {{ form_row(form.allowTerms) }}
                         {{ form_row(form.allowMarketing) }}
                         {{ form_row(form.countChild) }}
+                </fieldset>
                         {{ form_row(form.members) }}
                         {{ form_row(form.submit) }}
-
-                    {#<ul class="actions">#}
-                    {#<li>#}
-                    {#<button class="special action-duplicate">+ Dodaj kolejne dziecko</button>#}
-                    {#</li>#}
-                    {#</ul>#}
-                    {#</fieldset>#}
-                    {#<fieldset class="12u$">#}
-                    {#<input type="text" name="demo-name" id="demo-name[]" value="" placeholder="Imię">#}
-                    {#<input type="text" name="demo-surname" id="demo-surname[]" value="" placeholder="Nazwisko">#}
-                    {#<ul class="actions">#}
-                    {#<li>#}
-                    {#<button class="special action-duplicate">+ Dodaj kolejne dziecko</button>#}
-                    {#</li>#}
-                    {#</ul>#}
-                    {#</fieldset>#}
-                    {#<div class="6u 12u$(xsmall)">#}
-                    {#<input type="text" name="demo-name" id="demo-name" value="" placeholder="Name">#}
-                    {#</div>#}
-                    {#<div class="6u$ 12u$(xsmall)">#}
-                    {#<input type="email" name="demo-email" id="demo-email" value="" placeholder="Email">#}
-                    {#</div>#}
-                    {#<div class="12u$">#}
-                    {#<div class="select-wrapper">#}
-                    {#<select name="demo-category" id="demo-category">#}
-                    {#<option value="">- Category -</option>#}
-                    {#<option value="1">Manufacturing</option>#}
-                    {#<option value="1">Shipping</option>#}
-                    {#<option value="1">Administration</option>#}
-                    {#<option value="1">Human Resources</option>#}
-                    {#</select>#}
-                    {#</div>#}
-                    {#</div>#}
-                    {#<div class="4u 12u$(small)">#}
-                    {#<input type="radio" id="demo-priority-low" name="demo-priority" checked="">#}
-                    {#<label for="demo-priority-low">Low</label>#}
-                    {#</div>#}
-                    {#<div class="4u 12u$(small)">#}
-                    {#<input type="radio" id="demo-priority-normal" name="demo-priority">#}
-                    {#<label for="demo-priority-normal">Normal</label>#}
-                    {#</div>#}
-                    {#<div class="4u$ 12u$(small)">#}
-                    {#<input type="radio" id="demo-priority-high" name="demo-priority">#}
-                    {#<label for="demo-priority-high">High</label>#}
-                    {#</div>#}
-                    {#<div class="6u 12u$(small)">#}
-                    {#<input type="checkbox" id="demo-copy" name="demo-copy">#}
-                    {#<label for="demo-copy">Email me a copy</label>#}
-                    {#</div>#}
-                    {#<div class="6u$ 12u$(small)">#}
-                    {#<input type="checkbox" id="demo-human" name="demo-human" checked="">#}
-                    {#<label for="demo-human">Not a robot</label>#}
-                    {#</div>#}
-                    {#<div class="12u$">#}
-                    {#<textarea name="demo-message" id="demo-message" placeholder="Enter your message"#}
-                    {#rows="6"></textarea>#}
-                    {#</div>#}
             </div>
             {{ form_rest(form) }}
             </form>
@@ -141,5 +93,18 @@
     </div>
 {% endblock %}
 
-{% block stylesheets %}
+{% block javascripts %}
+    <script>
+        var form=Ite.get('form');
+        var countChild=form.get('#appbundle_babysitter_countChild');
+        var babysitterMembers=form.get('#appbundle_babysitter_members');
+        countChild.addEventChange(function () {
+            var prototype=babysitterMembers.getAttribute('data-prototype');
+            var template=[];
+            for(var i=0; i<this.getValue();i++){
+                template.push(prototype.replace(/__name__/g,i).replace(/__index__/g,i+1));
+            }
+            babysitterMembers.setHtml(template.join(''));
+        });
+    </script>
 {% endblock %}

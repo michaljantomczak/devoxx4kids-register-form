@@ -40,7 +40,6 @@
     <article id="main">
 
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
 
     </article>
 
@@ -80,7 +79,12 @@
     </footer>
     <!--[if lte IE 8]><script src="./js/ie/respond.min.js"></script><![endif]-->
 </div>
-<script src="./js/rejestracja.js"></script>
+{% javascripts '@ite_js' combine=true %}
+    <script src="{{ asset(asset_url) }}"></script>
+{% endjavascripts %}
+{% block javascripts %}{% endblock %}
+
+
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

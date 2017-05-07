@@ -74,3 +74,16 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+    assets:
+        ite_js:
+            inputs:
+                - '%kernel.root_dir%/Resources/js/ite/Ite.js'
+                - '%kernel.root_dir%/Resources/js/ite/element/*'
+                - '%kernel.root_dir%/Resources/js/ite/module/*'
+                - '%kernel.root_dir%/Resources/js/ite/provider/*'
