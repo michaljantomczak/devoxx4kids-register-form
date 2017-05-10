@@ -25,7 +25,8 @@ framework:
         save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
     fragments: ~
     http_method_override: true
-    assets: ~
+    assets:
+        version: v2
     php_errors:
         log: true
 
@@ -83,6 +84,8 @@ assetic:
         ite_js:
             inputs:
                 - '%kernel.root_dir%/Resources/js/ite/Ite.js'
-                - '%kernel.root_dir%/Resources/js/ite/element/*'
+                - '%kernel.root_dir%/Resources/js/ite/element/IteElement.js'
+                - '%kernel.root_dir%/Resources/js/ite/element/IteFieldElement.js'
+                - '%kernel.root_dir%/Resources/js/ite/element/IteFieldDateElement.js'
                 - '%kernel.root_dir%/Resources/js/ite/module/*'
                 - '%kernel.root_dir%/Resources/js/ite/provider/*'

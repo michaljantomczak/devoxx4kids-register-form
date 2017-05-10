@@ -54,7 +54,7 @@
 {% block member_widget %}
     <hr/>
     <fieldset class="12u">
-        <h3>{{ 'Member'|trans }} __index__</h3>
+        <h3>{{ 'Member'|trans }} <span class="position">{{ form.vars.name +1 }}</span></h3>
         {% for field in form %}
             {{ form_row(field) }}
         {% endfor %}
@@ -107,6 +107,7 @@
 
 {% block javascripts %}
     <script>
+        Ite.getAll('input[type="date"]');
         var form=Ite.get('form');
         var countChild=form.get('#appbundle_babysitter_countChild');
         var babysitterMembers=form.get('#appbundle_babysitter_members');
@@ -114,9 +115,10 @@
             var prototype=babysitterMembers.getAttribute('data-prototype');
             var template=[];
             for(var i=0; i<this.getValue();i++){
-                template.push(prototype.replace(/__name__/g,i).replace(/__index__/g,i+1));
+                template.push(prototype.replace(/__name__/g,i).replace('<span class="position">1</span>',i+1));
             }
             babysitterMembers.setHtml(template.join(''));
+            Ite.getAll('input[type="date"]');
         });
     </script>
 {% endblock %}

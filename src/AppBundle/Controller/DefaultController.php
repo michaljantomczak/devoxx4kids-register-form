@@ -107,7 +107,7 @@ class DefaultController extends Controller
             }
         }
 
-        $message .= ' na listę wstępną. Ze wzgędu na ograniczoną liczbę miejsc, nie możemy zagwarantować uczestnictwa każdego dziecka. W najbliższym czasie będziemy kontaktować się telefonicznie w celu potwierdzenia zgłoszenia.';
+        $message .= ' na listę wstępną. Ze względu na ograniczoną liczbę miejsc, nie możemy zagwarantować uczestnictwa każdego dziecka. W najbliższym czasie będziemy kontaktować się telefonicznie w celu potwierdzenia zgłoszenia.';
         return $message;
     }
 

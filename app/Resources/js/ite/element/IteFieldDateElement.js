@@ -134,6 +134,21 @@ Ite.registerElement('IteFieldDateElement','input[type="date"]',function(helper,h
 		if(this.getValue()==''){
 			var date=new Date();
 			prv.selectedDay=null;
+            var min=this.getMin();
+            var max=this.getMax();
+			if(min){
+				min=new Date(min);
+			}
+			if(max){
+				max=new Date(max);
+			}
+			if(date>max){
+				date=max;
+			}
+
+			if(date<min){
+				date=min;
+			}
 		}
 		else{
 			var date=new Date(this.getValue());
@@ -206,8 +221,8 @@ Ite.registerElement('IteFieldDateElement','input[type="date"]',function(helper,h
 
 		prv.render(date,datePicker,field);
 
-		this.getParent().append(datePicker);
 
+		this.appendAfter(datePicker);
 	}
 
 	prv.bind=function(){

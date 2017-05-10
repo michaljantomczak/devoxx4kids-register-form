@@ -10,6 +10,9 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class MemberType extends AbstractType
@@ -19,6 +22,15 @@ class MemberType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        $beginAt=new \DateTime();
+        $beginAt->sub(new \DateInterval('P16Y'));
+        $beginAt=new \DateTime($beginAt->format('Y-01-01'));
+
+        $endAt=new \DateTime();
+        $endAt->sub(new \DateInterval('P6Y'));
+        $endAt=new \DateTime($endAt->format('Y-12-31'));
+
         $builder
             ->add('firstName',null,[
                 'constraints'=>[
@@ -32,8 +44,14 @@ class MemberType extends AbstractType
             ])
             ->add('bornAt',DateType::class,[
                 'widget'=>'single_text',
+                'attr'=>[
+                    'max'=>$endAt->format('Y-m-d'),
+                    'min'=>$beginAt->format('Y-m-d'),
+                ],
                 'constraints'=>[
                     new NotBlank(),
+                    new GreaterThanOrEqual(['value'=>$beginAt]),
+                    new LessThanOrEqual(['value'=>$endAt]),
                 ],
             ])
             ->add('prohibitedFood',EntityType::class,[

@@ -1,0 +1,96 @@
+.date-picker, .date-picker *{
+	box-sizing: content-box;
+}
+
+.date-picker{
+	width: 292px;
+	background: #ffffff;
+	padding: 3px;
+	z-index: 1000;
+	position: absolute;
+	font-size: 0px;
+}
+
+.date-picker-header{
+	border: 1px solid #aaaaaa;
+	background: #cccccc url(../img/date/header_background.png) 50% 50% repeat-x;
+	color: #222222;
+	font-weight: bold;
+	border-radius: 4px;
+	height: 29px;
+	white-space: nowrap;
+}
+
+.date-picker-header > *{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.data-picker-navigate{
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 29px;
+	height: 29px;
+	display: inline-block;
+	cursor: pointer;
+	-moz-user-select: none; 
+	-khtml-user-select: none; 
+	-webkit-user-select: none; 
+	-o-user-select: none;
+}
+
+.date-picker-prev-month,.date-picker-prev-year{
+	background-image: url(../img/date/prev_icon.png);
+}
+
+.date-picker-next-month,.date-picker-next-year{
+	background-image: url(../img/date/next_icon.png);
+}
+
+.date-picker-clear{
+	background-image: url(../img/date/clear_icon.png);
+}
+
+.date-picker-title{
+	width: 145px;
+	display: inline-block;
+	text-align: center;
+	font-size: 15px;
+}
+
+.date-picker table{
+	border-spacing: 5px;
+	border-collapse: separate;
+}
+
+.date-picker table thead tr th {
+	text-align: right;
+	padding: 3px;
+	color: #555555;
+	font-size: 13px;
+}
+
+.date-picker table tbody td{
+	width: 28px;
+	height: 17px;
+	text-align: right;
+	padding: 3px;
+	color: #555555;
+	border: 1px solid #d3d3d3;
+	cursor: pointer;
+	font-size: 13px;
+}
+
+.date-picker table tbody td.data-picker-active{
+	border: 1px solid #fcefa1;
+	background: #fcefa1;
+	font-weight: bold;
+}
+
+.date-picker table tbody td.data-picker-disable{
+	border: 1px solid #d3d3d3;
+	background: #d3d3d3;
+	font-weight: bold;
+}
+
+
