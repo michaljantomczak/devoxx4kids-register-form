@@ -40,7 +40,7 @@ class City
      *
      * @ORM\Column(name="is_enabled", type="boolean")
      */
-    private $isEnabled;
+    private $enabled;
 
     /**
      * @var \DateTime
@@ -98,9 +98,9 @@ class City
      *
      * @return City
      */
-    public function setIsEnabled($isEnabled)
+    public function setEnabled($isEnabled)
     {
-        $this->isEnabled = $isEnabled;
+        $this->enabled = $isEnabled;
 
         return $this;
     }
@@ -110,9 +110,9 @@ class City
      *
      * @return bool
      */
-    public function getIsEnabled()
+    public function isEnabled()
     {
-        return $this->isEnabled;
+        return $this->enabled;
     }
 
     /**

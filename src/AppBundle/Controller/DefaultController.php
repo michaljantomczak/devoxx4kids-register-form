@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Babysitter;
 use AppBundle\Entity\City;
-use AppBundle\Entity\Member;
 use AppBundle\Form\BabysitterType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,6 +23,12 @@ class DefaultController extends Controller
      */
     public function indexAction(City $city, Request $request)
     {
+        if(!$city->isEnabled()){
+            return $this->render('default/index.html.twig', [
+                'city' => $city,
+            ]);
+        }
+
         $babysitter = new Babysitter();
         $babysitter->setCity($city);
         $form = $this->createForm(BabysitterType::class, $babysitter);
@@ -54,6 +59,8 @@ class DefaultController extends Controller
     /**
      *
      * @Route("/confirm", name="form_confirm")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function confirmAction(Request $request)
     {
@@ -111,12 +118,20 @@ class DefaultController extends Controller
         return $message;
     }
 
+    /**
+     * @param string $firstName
+     * @return string
+     */
     private function detectGender($firstName)
     {
         $char = substr($firstName, -1, 1);
         return $char == 'a' ? 'f' : 'm';
     }
 
+    /**
+     * @param Babysitter $babysitter
+     * @param string $message
+     */
     private function sendEmail(Babysitter $babysitter, $message)
     {
         $message = \Swift_Message::newInstance()

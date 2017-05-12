@@ -1,74 +1,75 @@
 {% extends 'base.html.twig' %}
+{% if form is defined %}
+    {% form_theme form _self %}
 
-{% form_theme form _self %}
+    {% block form_errors %}
+        {% if errors|length > 0 %}
+            <ul class="error">
+                {% for error in errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endblock %}
 
-{% block form_errors %}
-    {% if errors|length > 0 %}
-        <ul class="error">
-            {% for error in errors %}
-                <li>{{ error.message }}</li>
+    {% block checkbox_row %}
+        <div class="12u">
+
+            {{ form_widget(form) }}
+            {{ form_label(form) }}
+            {{ form_errors(form) }}
+        </div>
+    {% endblock %}
+
+    {% block form_row %}
+        <div class="12u">
+            {{ form_label(form) }}
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+    {% endblock %}
+
+    {% block form %}
+        {{ form_start(form) }}
+        <div class="row uniform">
+            {% for row in form %}
+                {{ form_row(row) }}
             {% endfor %}
-        </ul>
-    {% endif %}
-{% endblock %}
+        </div>
+        {{ form_end(form) }}
+    {% endblock %}
 
-{% block checkbox_row %}
-    <div class="12u">
+    {% block member_collection_row %}
+        <div id="{{ form.vars.id }}" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}" class="12u">
+            {{ form_widget(form) }}
+        </div>
+    {% endblock %}
 
-        {{ form_widget(form) }}
-        {{ form_label(form) }}
-        {{ form_errors(form) }}
-    </div>
-{% endblock %}
-
-{% block form_row %}
-    <div class="12u">
-        {{ form_label(form) }}
-        {{ form_widget(form) }}
-        {{ form_errors(form) }}
-    </div>
-{% endblock %}
-
-{% block form %}
-    {{ form_start(form) }}
-    <div class="row uniform">
-        {% for row in form %}
-            {{ form_row(row) }}
-        {% endfor %}
-    </div>
-    {{ form_end(form) }}
-{% endblock %}
-
-{% block member_collection_row %}
-<div id="{{ form.vars.id }}" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}" class="12u">
-    {{ form_widget(form) }}
-</div>
-{% endblock %}
-
-{% block member_collection_widget %}
-    {% for field in form %}
-        {{ form_widget(field) }}
-    {% endfor %}
-{% endblock %}
-
-{% block member_widget %}
-    <hr/>
-    <fieldset class="12u">
-        <h3>{{ 'Member'|trans }} <span class="position">{{ form.vars.name +1 }}</span></h3>
+    {% block member_collection_widget %}
         {% for field in form %}
-            {{ form_row(field) }}
+            {{ form_widget(field) }}
         {% endfor %}
-    </fieldset>
-{% endblock %}
+    {% endblock %}
 
-{% block button_row %}
-    <div class="12u">
+    {% block member_widget %}
         <hr/>
-        <ul class="actions">
-            <li>{{ form_widget(form) }}</li>
-        </ul>
-    </div>
-{% endblock %}
+        <fieldset class="12u">
+            <h3>{{ 'Member'|trans }} <span class="position">{{ form.vars.name +1 }}</span></h3>
+            {% for field in form %}
+                {{ form_row(field) }}
+            {% endfor %}
+        </fieldset>
+    {% endblock %}
+
+    {% block button_row %}
+        <div class="12u">
+            <hr/>
+            <ul class="actions">
+                <li>{{ form_widget(form) }}</li>
+            </ul>
+        </div>
+    {% endblock %}
+{% endif %}
 
 {#{% block button_widget %}#}
     {#{{ parent() }}#}
@@ -82,11 +83,13 @@
 
     <div class="wrapper style5">
         <div class="inner">
-
-            {{ form_start(form,{attr:{novalidate:true}}) }}
-            <div class="row uniform">
-                <fieldset class="12u$">
-                    <h3>{{ 'Babysitter'|trans }}</h3>
+            {% if city.enabled==false %}
+                {{ 'Form is unavailable.'|trans }}
+            {% else %}
+                {{ form_start(form,{attr:{novalidate:true}}) }}
+                <div class="row uniform">
+                    <fieldset class="12u$">
+                        <h3>{{ 'Babysitter'|trans }}</h3>
                         {{ form_row(form.firstName) }}
                         {{ form_row(form.lastName) }}
                         {{ form_row(form.email) }}
@@ -94,12 +97,13 @@
                         {{ form_row(form.allowTerms) }}
                         {{ form_row(form.allowMarketing) }}
                         {{ form_row(form.countChild) }}
-                </fieldset>
-                        {{ form_row(form.members) }}
-                        {{ form_row(form.submit) }}
-            </div>
-            {{ form_rest(form) }}
-            </form>
+                    </fieldset>
+                    {{ form_row(form.members) }}
+                    {{ form_row(form.submit) }}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            {% endif %}
         </div>
 
     </div>
@@ -108,14 +112,14 @@
 {% block javascripts %}
     <script>
         Ite.getAll('input[type="date"]');
-        var form=Ite.get('form');
-        var countChild=form.get('#appbundle_babysitter_countChild');
-        var babysitterMembers=form.get('#appbundle_babysitter_members');
+        var form = Ite.get('form');
+        var countChild = form.get('#appbundle_babysitter_countChild');
+        var babysitterMembers = form.get('#appbundle_babysitter_members');
         countChild.addEventChange(function () {
-            var prototype=babysitterMembers.getAttribute('data-prototype');
-            var template=[];
-            for(var i=0; i<this.getValue();i++){
-                template.push(prototype.replace(/__name__/g,i).replace('<span class="position">1</span>',i+1));
+            var prototype = babysitterMembers.getAttribute('data-prototype');
+            var template = [];
+            for (var i = 0; i < this.getValue(); i++) {
+                template.push(prototype.replace(/__name__/g, i).replace('<span class="position">1</span>', i + 1));
             }
             babysitterMembers.setHtml(template.join(''));
             Ite.getAll('input[type="date"]');
