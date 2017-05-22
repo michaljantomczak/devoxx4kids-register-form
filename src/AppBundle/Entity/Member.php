@@ -68,6 +68,13 @@ class Member
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="confirmed_at", type="datetime",nullable=true)
+     */
+    private $confirmedAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
@@ -253,6 +260,24 @@ class Member
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $confirmedAt
+     * @return Member
+     */
+    public function setConfirmedAt($confirmedAt)
+    {
+        $this->confirmedAt = $confirmedAt;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getConfirmedAt()
+    {
+        return $this->confirmedAt;
     }
 }
 
