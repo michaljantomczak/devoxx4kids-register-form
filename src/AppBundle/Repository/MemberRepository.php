@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Member;
+
 /**
  * MemberRepository
  *
@@ -10,4 +12,12 @@ namespace AppBundle\Repository;
  */
 class MemberRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @return Member[]
+     */
+    public function findConfirm()
+    {
+        $query = $this->_em->createQuery('SELECT m FROM AppBundle:Member m WHERE m.confirmedAt IS NOT null ');
+        return $query->getResult();
+    }
 }
