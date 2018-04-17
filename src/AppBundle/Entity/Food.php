@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Food
  *
- * @ORM\Table(name="food")
+ * @ORM\Table(name="foods")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FoodRepository")
  */
 class Food
@@ -17,7 +17,7 @@ class Food
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 

@@ -1,0 +1,5 @@
+Informujemy że:<br/><br/>
+{% for member in members %}
+    <strong>{{ member.firstName }} {{ member.lastName }}</strong> -  {% if member.isExpectant %} niestety nie zdołaliśmy przypisać do żadnej grupy z powodu braku miejsc. Jeśli inna osoba zrezygnuje to jest szansa, na uczestnictwo dziecko. O wszelkich zmianach poinformujemy mailem. {% else %} zdołaliśmy przypisać do grupy {{ member.group.name }}.{% endif %}<br/>
+{% endfor %}
+

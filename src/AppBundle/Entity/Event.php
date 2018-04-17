@@ -7,17 +7,17 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * City
  *
- * @ORM\Table(name="city")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CityRepository")
+ * @ORM\Table(name="events")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\EventRepository")
  */
-class City
+class Event
 {
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
@@ -57,6 +57,7 @@ class City
     private $createdAt;
 
 
+
     /**
      * Get id
      *
@@ -72,7 +73,7 @@ class City
      *
      * @param string $name
      *
-     * @return City
+     * @return Event
      */
     public function setName($name)
     {
@@ -96,7 +97,7 @@ class City
      *
      * @param boolean $isEnabled
      *
-     * @return City
+     * @return Event
      */
     public function setEnabled($isEnabled)
     {
@@ -120,7 +121,7 @@ class City
      *
      * @param \DateTime $updatedAt
      *
-     * @return City
+     * @return Event
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -144,7 +145,7 @@ class City
      *
      * @param \DateTime $createdAt
      *
-     * @return City
+     * @return Event
      */
     public function setCreatedAt($createdAt)
     {
@@ -165,7 +166,7 @@ class City
 
     /**
      * @param string $slug
-     * @return City
+     * @return Event
      */
     public function setSlug($slug)
     {

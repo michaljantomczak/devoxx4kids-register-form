@@ -2,7 +2,10 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Event;
 use AppBundle\Entity\Member;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * MemberRepository
@@ -19,5 +22,25 @@ class MemberRepository extends \Doctrine\ORM\EntityRepository
     {
         $query = $this->_em->createQuery('SELECT m FROM AppBundle:Member m WHERE m.confirmedAt IS NOT null ');
         return $query->getResult();
+    }
+
+    /**
+     * @param Event $event
+     * @return mixed
+     */
+    public function countMaxMemberInGroup(Event $event)
+    {
+        $query = $this->_em->createQuery('SELECT count(m) as c FROM AppBundle:Member m JOIN m.babysitter b WHERE b.event=:event AND b.confirmedMailAt IS NOT NULL GROUP BY m.group ORDER BY c DESC');
+        $query->setMaxResults(1);
+        $query->setParameter('event',$event);
+        try {
+            $data = $query->getSingleScalarResult();
+        } catch (NonUniqueResultException $e) {
+            throw new \LogicException();
+        } catch (NoResultException $e) {
+            return 0;
+        }
+
+        return $data['c'];
     }
 }

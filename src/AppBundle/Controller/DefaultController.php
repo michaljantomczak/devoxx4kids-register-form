@@ -3,119 +3,104 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Babysitter;
-use AppBundle\Entity\City;
+use AppBundle\Entity\Event;
+use AppBundle\Entity\Member;
+use AppBundle\Entity\MemberGroup;
+use AppBundle\Entity\Stage;
 use AppBundle\Form\BabysitterType;
+use Doctrine\ORM\NoResultException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/city-{city}", name="homepage")
-     * @ParamConverter("city", class="AppBundle:City", options={"mapping": {"city": "slug"}})
-     * @param City $city
+     * @Route("/event-{event}", name="homepage")
+     * @ParamConverter("event", class="AppBundle:Event", options={"mapping": {"event": "slug"}})
+     * @param Event $event
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws NoResultException
      */
-    public function indexAction(City $city, Request $request)
+    public function indexAction(Event $event, Request $request)
     {
-        if(!$city->isEnabled()){
+        if (!$event->isEnabled()) {
             return $this->render('default/index.html.twig', [
-                'city' => $city,
+                'event' => $event,
+                'active' => false,
+            ]);
+        }
+
+        $stageRepository = $this->get('doctrine')->getRepository(Stage::class);
+
+        try {
+            $stage = $stageRepository->findLastActiveStage($event);
+        } catch (NoResultException $e) {
+            return $this->render('default/index.html.twig', [
+                'event' => $event,
+                'active' => false,
+            ]);
+        }
+        $memberRepository = $this->get('doctrine')->getRepository(Member::class);
+        $countMember = $memberRepository->countMaxMemberInGroup($event);
+        if ($stage->getCountRequiredMembers() <= $countMember) {
+            return $this->render('default/index.html.twig', [
+                'event' => $event,
+                'active' => false,
             ]);
         }
 
         $babysitter = new Babysitter();
-        $babysitter->setCity($city);
+        $babysitter->setEvent($event);
         $form = $this->createForm(BabysitterType::class, $babysitter);
         $form->handleRequest($request);
         if (!$form->isValid()) {
             return $this->render('default/index.html.twig', [
                 'form' => $form->createView(),
-                'city' => $city,
+                'event' => $event,
+                'active' => true,
             ]);
         }
 
         $data = $form->getData();
         $em = $this->get('doctrine.orm.entity_manager');
+
+        $this->fillGroups($babysitter->getMembers());
+
         $em->persist($data);
         $em->flush();
 
-        $message = $this->createConfirmMessage($data);
-        $this->addFlash(
-            'confirm',
-            $message
-        );
+        $this->addFlash('email', $babysitter->getEmail());
 
-        $this->sendEmail($babysitter,$message);
+        $this->sendConfirmEmail($babysitter, $this->renderView('default/email.html.twig',['token'=>$babysitter->getToken()]));
 
-        return $this->redirectToRoute('form_confirm');
+        return $this->redirectToRoute('info');
     }
 
     /**
      *
-     * @Route("/confirm", name="form_confirm")
+     * @Route("/info", name="info")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function confirmAction(Request $request)
+    public function infoAction(Request $request)
     {
-
         /**
          * @var Session $session
          */
         $session = $request->getSession();
-        $message = $session->getFlashBag()->get('confirm');
-        if (!$message) {
+        $email = $session->getFlashBag()->get('email');
+        if (!$email) {
             throw new NotFoundHttpException();
         }
-        return $this->render('default/confirm.html.twig', [
-            'message' => $message[0],
+        return $this->render('default/info.html.twig', [
+            'email' => $email[0],
         ]);
-    }
-
-    /**
-     * @param Babysitter $babysitter
-     * @return string
-     */
-    private function createConfirmMessage(Babysitter $babysitter)
-    {
-        $message = 'Dzień Dobry - dziękujemy za rejestrację na warsztaty Devoxx4kids w mieście ' . $babysitter->getCity()->getName() . '. Uprzejmie informujemy, że: ';
-        $first = true;
-        $gender = null;
-        foreach ($babysitter->getMembers() as $member) {
-            if ($first) {
-                $first = false;
-            } else {
-                $message .= ', ';
-            }
-            $message .= $member->getFirstName() . ' ' . $member->getLastName();
-            if (!$gender) {
-                $gender = $this->detectGender($member->getFirstName());
-            } else if ($gender != $this->detectGender($member->getFirstName())) {
-                $gender = 'b';
-            }
-        }
-        if (count($babysitter->getMembers()) === 1) {
-            if ('f' === $gender) {
-                $message .= ' została zapisana ';
-            } else {
-                $message .= ' został zapisany ';
-            }
-        } else {
-            if ('f' === $gender) {
-                $message .= ' zostały zapisane ';
-            } else {
-                $message .= ' zostali zapisani ';
-            }
-        }
-
-        $message .= ' na listę wstępną. Ze względu na ograniczoną liczbę miejsc, nie możemy zagwarantować uczestnictwa każdego dziecka. W najbliższym czasie będziemy kontaktować się telefonicznie w celu potwierdzenia zgłoszenia.';
-        return $message;
     }
 
     /**
@@ -132,15 +117,32 @@ class DefaultController extends Controller
      * @param Babysitter $babysitter
      * @param string $message
      */
-    private function sendEmail(Babysitter $babysitter, $message)
+    private function sendConfirmEmail(Babysitter $babysitter, $message)
     {
         $message = \Swift_Message::newInstance()
-            ->setSubject('Rejestracja Devoxx4kids') //FIXME add translations
+            ->setSubject('Rejestracja Devoxx4kids')//FIXME add translations
             ->setFrom($this->getParameter('mailer_from'))
             ->setTo($babysitter->getEmail())
             ->setBody($message,
-                'text/plain'
+                'text/html'
             );
         $this->get('mailer')->send($message);
+    }
+
+    /**
+     * @param Member[] $members
+     * @throws NoResultException
+     */
+    private function fillGroups($members)
+    {
+        $groupRepository = $this->get('doctrine')->getRepository(MemberGroup::class);
+        $now = new \DateTime();
+        $currentYeat = $now->format('Y');
+        foreach ($members as $member) {
+            $year = $member->getBornAt()->format('Y');
+            $memberYear = $currentYeat - $year;
+            $group = $groupRepository->findByOld($memberYear);
+            $member->setGroup($group);
+        }
     }
 }

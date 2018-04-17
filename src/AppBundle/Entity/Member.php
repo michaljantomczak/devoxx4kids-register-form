@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Member
  *
- * @ORM\Table(name="member")
+ * @ORM\Table(name="members")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MemberRepository")
  */
 class Member
@@ -17,7 +17,7 @@ class Member
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
@@ -44,6 +44,14 @@ class Member
     private $lastName;
 
     /**
+     * @var MemberGroup
+     *
+     * @ORM\ManyToOne(targetEntity="MemberGroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id",nullable=false,onDelete="CASCADE",nullable=false)
+     */
+    private $group;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="born_at", type="datetime")
@@ -66,11 +74,11 @@ class Member
     private $prohibitedFood;
 
     /**
-     * @var \DateTime
+     * @var boolean
      *
-     * @ORM\Column(name="confirmed_at", type="datetime",nullable=true)
+     * @ORM\Column(name="is_expectant", type="boolean",nullable=false)
      */
-    private $confirmedAt;
+    private $expectant;
 
     /**
      * @var \DateTime
@@ -82,6 +90,7 @@ class Member
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime());
+        $this->setExpectant(true);
     }
 
     /**
@@ -263,21 +272,39 @@ class Member
     }
 
     /**
-     * @param \DateTime $confirmedAt
+     * @param MemberGroup $group
      * @return Member
      */
-    public function setConfirmedAt($confirmedAt)
+    public function setGroup($group)
     {
-        $this->confirmedAt = $confirmedAt;
+        $this->group = $group;
         return $this;
     }
 
     /**
-     * @return \DateTime
+     * @return MemberGroup
      */
-    public function getConfirmedAt()
+    public function getGroup()
     {
-        return $this->confirmedAt;
+        return $this->group;
+    }
+
+    /**
+     * @param bool $expectant
+     * @return Member
+     */
+    public function setExpectant($expectant)
+    {
+        $this->expectant = $expectant;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExpectant()
+    {
+        return $this->expectant;
     }
 }
 

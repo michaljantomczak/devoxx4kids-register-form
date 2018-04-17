@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block form_row %}
+
+{% endblock %}
+
+{% block body %}
+
+    <header>
+        <h2>{{ 'One moment'|trans }}</h2>
+    </header>
+    <div class="wrapper style5">
+        <div class="inner">
+            Aby zatwierdzić rejestrację na adres {{ email }} wysłaliśmy wiadomość z linkiem potwierdzającym rejestrację.
+            Prosimy sprawdzić skrzynkę i kliknąć w link który znajduje się w treści wiadomości.
+        </div>
+    </div>
+
+{% endblock %}
+

@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TShirtSize
+ * MemberGroup
  *
- * @ORM\Table(name="t_shirt_sizes")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TShirtSizeRepository")
+ * @ORM\Table(name="groups")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\MemberGroupRepository")
  */
-class TShirtSize
+class MemberGroup
 {
     /**
      * @var int
@@ -29,18 +29,18 @@ class TShirtSize
     private $name;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @ORM\Column(name="begin_old_member", type="integer")
      */
-    private $updatedAt;
+    private $beginOldMember;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="created_at", type="datetime")
+     * @ORM\Column(name="end_old_member", type="integer")
      */
-    private $createdAt;
+    private $endOldMember;
 
 
     /**
@@ -58,7 +58,7 @@ class TShirtSize
      *
      * @param string $name
      *
-     * @return TShirtSize
+     * @return MemberGroup
      */
     public function setName($name)
     {
@@ -78,59 +78,51 @@ class TShirtSize
     }
 
     /**
-     * Set updatedAt
+     * Set beginOldMember
      *
-     * @param \DateTime $updatedAt
+     * @param integer $beginOldMember
      *
-     * @return TShirtSize
+     * @return MemberGroup
      */
-    public function setUpdatedAt($updatedAt)
+    public function setBeginOldMember($beginOldMember)
     {
-        $this->updatedAt = $updatedAt;
+        $this->beginOldMember = $beginOldMember;
 
         return $this;
     }
 
     /**
-     * Get updatedAt
+     * Get beginOldMember
      *
-     * @return \DateTime
+     * @return int
      */
-    public function getUpdatedAt()
+    public function getBeginOldMember()
     {
-        return $this->updatedAt;
+        return $this->beginOldMember;
     }
 
     /**
-     * Set createdAt
+     * Set endOldMember
      *
-     * @param \DateTime $createdAt
+     * @param integer $endOldMember
      *
-     * @return TShirtSize
+     * @return MemberGroup
      */
-    public function setCreatedAt($createdAt)
+    public function setEndOldMember($endOldMember)
     {
-        $this->createdAt = $createdAt;
+        $this->endOldMember = $endOldMember;
 
         return $this;
     }
 
     /**
-     * Get createdAt
+     * Get endOldMember
      *
-     * @return \DateTime
+     * @return int
      */
-    public function getCreatedAt()
+    public function getEndOldMember()
     {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getName();
+        return $this->endOldMember;
     }
 }
 

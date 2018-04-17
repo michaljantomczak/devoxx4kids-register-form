@@ -10,7 +10,7 @@ namespace AppBundle\Command;
 
 
 use AppBundle\Entity\Babysitter;
-use AppBundle\Entity\City;
+use AppBundle\Entity\Event;
 use AppBundle\Entity\Member;
 use AppBundle\Exception\CityNotFoundException;
 use AppBundle\Repository\MemberRepository;
@@ -55,7 +55,7 @@ class MemberConfirmSendCommand extends ContainerAwareCommand
      * @param $city
      * @return mixed[]
      */
-    private function getMessages(City $city=null)
+    private function getMessages(Event $city=null)
     {
         $results=[];
         $em=$this->getContainer()->get('doctrine')->getManager();
@@ -67,7 +67,7 @@ class MemberConfirmSendCommand extends ContainerAwareCommand
         $members=$memberRepository->findConfirm();
         foreach($members as $member){
             $babysitter=$member->getBabysitter();
-            if(null!==$city && $babysitter->getCity()!==$city){
+            if(null!==$city && $babysitter->getEvent()!==$city){
                 continue;
             }
 
@@ -82,13 +82,13 @@ class MemberConfirmSendCommand extends ContainerAwareCommand
 
     /**
      * @param string $slug
-     * @return City
+     * @return Event
      * @throws CityNotFoundException
      */
     private function getCity($slug)
     {
         $em=$this->getContainer()->get('doctrine')->getManager();
-        $cityRepository=$em->getRepository(City::class);
+        $cityRepository=$em->getRepository(Event::class);
         $city=$cityRepository->findOneBy(['slug'=>$slug]);
         if(!$city){
             throw new CityNotFoundException($slug);

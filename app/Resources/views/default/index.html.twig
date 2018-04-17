@@ -78,12 +78,12 @@
 
 {% block body %}
     <header>
-        <h2>{{ 'Register'|trans }} - {{ city.name }}</h2>
+        <h2>{{ 'Register'|trans }} - {{ event.name }}</h2>
     </header>
 
     <div class="wrapper style5">
         <div class="inner">
-            {% if city.enabled==false %}
+            {% if false == active %}
                 {{ 'Form is unavailable.'|trans }}
             {% else %}
                 {{ form_start(form,{attr:{novalidate:true}}) }}

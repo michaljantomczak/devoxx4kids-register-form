@@ -10,7 +10,7 @@ namespace AppBundle\Command;
 
 
 use AppBundle\Entity\Babysitter;
-use AppBundle\Entity\City;
+use AppBundle\Entity\Event;
 use AppBundle\Entity\Member;
 use AppBundle\Exception\CityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -54,7 +54,7 @@ class MemberRejectedSendCommand extends ContainerAwareCommand
      * @param $city
      * @return mixed[]
      */
-    private function getMessages(City $city=null)
+    private function getMessages(Event $city=null)
     {
         $results=[];
         $em=$this->getContainer()->get('doctrine')->getManager();
@@ -81,13 +81,13 @@ class MemberRejectedSendCommand extends ContainerAwareCommand
 
     /**
      * @param string $slug
-     * @return City
+     * @return Event
      * @throws CityNotFoundException
      */
     private function getCity($slug)
     {
         $em=$this->getContainer()->get('doctrine')->getManager();
-        $cityRepository=$em->getRepository(City::class);
+        $cityRepository=$em->getRepository(Event::class);
         $city=$cityRepository->findOneBy(['slug'=>$slug]);
         if(!$city){
             throw new CityNotFoundException($slug);

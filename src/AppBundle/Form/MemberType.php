@@ -24,7 +24,7 @@ class MemberType extends AbstractType
     {
 
         $beginAt=new \DateTime();
-        $beginAt->sub(new \DateInterval('P16Y'));
+        $beginAt->sub(new \DateInterval('P15Y'));
         $beginAt=new \DateTime($beginAt->format('Y-01-01'));
 
         $endAt=new \DateTime();

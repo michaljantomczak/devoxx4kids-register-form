@@ -1,17 +1,17 @@
-version: "2"
+version: "3"
 services:
-  d4k_httpd:
-    build: httpd
+  httpd:
+    build: docker/httpd
     ports:
       - 2057:80
     volumes:
-      - ../:/var/www/html
+      - .:/var/www/html
     links:
-      - d4k_pgsql
+      - pgsql
     environment:
       - XDEBUG_CONFIG='remote_host=192.168.0.52'
-  d4k_pgsql:
-    build: pgsql
+  pgsql:
+    build: docker/pgsql
     environment:
       - DBNAME='db'
       - DBUSER='root:password'

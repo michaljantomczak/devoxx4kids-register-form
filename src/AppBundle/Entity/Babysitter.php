@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Babysitter
  *
- * @ORM\Table(name="babysitters")
+ * @ORM\Table(name="babysitters",uniqueConstraints={@ORM\UniqueConstraint(name="token_unique_idx", columns={"token"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BabysitterRepository")
  */
 class Babysitter
@@ -18,17 +18,17 @@ class Babysitter
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var City
+     * @var Event
      *
-     * @ORM\ManyToOne(targetEntity="City")
-     * @ORM\JoinColumn(name="city_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Event")
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id",nullable=false,onDelete="CASCADE")
      */
-    private $city;
+    private $event;
 
     /**
      * @var string
@@ -82,14 +82,29 @@ class Babysitter
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="confirmed_mail_at", type="datetime",nullable=true)
+     */
+    private $confirmedMailAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="token", type="string",nullable=true)
+     */
+    private $token;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
     public function __construct()
     {
-        $this->members=new ArrayCollection();
+        $this->members = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
+        $this->setToken(md5(uniqid()));
     }
 
     /**
@@ -259,21 +274,21 @@ class Babysitter
     }
 
     /**
-     * @param City $city
+     * @param Event $event
      * @return Babysitter
      */
-    public function setCity(City $city=null)
+    public function setEvent(Event $event = null)
     {
-        $this->city = $city;
+        $this->event = $event;
         return $this;
     }
 
     /**
-     * @return City
+     * @return Event
      */
-    public function getCity()
+    public function getEvent()
     {
-        return $this->city;
+        return $this->event;
     }
 
     /**
@@ -287,7 +302,8 @@ class Babysitter
     /**
      * @param Member $member
      */
-    public function addMember(Member $member){
+    public function addMember(Member $member)
+    {
         $member->setBabysitter($this);
         $this->members->add($member);
     }
@@ -295,9 +311,46 @@ class Babysitter
     /**
      * @param Member $member
      */
-    public function removeMember(Member $member){
+    public function removeMember(Member $member)
+    {
         $member->setBabysitter(null);
         $this->members->remove($member);
+    }
+
+    /**
+     * @param string $token
+     * @return Babysitter
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param \DateTime $confirmedMailAt
+     * @return Babysitter
+     */
+    public function setConfirmedMailAt($confirmedMailAt)
+    {
+        $this->confirmedMailAt = $confirmedMailAt;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getConfirmedMailAt()
+    {
+        return $this->confirmedMailAt;
     }
 
 }
