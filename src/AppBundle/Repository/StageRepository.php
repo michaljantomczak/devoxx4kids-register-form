@@ -23,7 +23,7 @@ class StageRepository extends \Doctrine\ORM\EntityRepository
      */
     public function findLastActiveStage(Event $event)
     {
-        $query = $this->_em->createQuery('SELECT s FROM AppBundle:Stage s WHERE s.event=:event AND s.beginAt<CURRENT_TIMESTAMP()');
+        $query = $this->_em->createQuery('SELECT s FROM AppBundle:Stage s WHERE s.event=:event AND s.beginAt<CURRENT_TIMESTAMP() ORDER BY s.beginAt DESC');
         $query->setMaxResults(1);
         $query->setParameter('event', $event);
         try {
