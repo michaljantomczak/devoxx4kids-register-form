@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -60,6 +61,15 @@ class BabysitterType extends AbstractType
                     new Length(['max'=>19])
                 ]
 
+            ])
+            ->add('allowConditions',CheckboxType::class,[
+                'label'=>'Potwierdzam, że zapoznałem się z regulaminami i je akceptuję.',
+                'required'=>true,
+                'mapped'=>false,
+                'block_name'=>'allow_conditions',
+                'constraints'=>[
+                    new NotBlank(),
+                ]
             ])
             ->add('allowTerms',null,[
                 'label'=>'Wyrażam zgodę na przetwarzanie moich danych osobowych przez Fundację Coder Dojo Polska z siedzibą w Zambrowie (ul. Papieża Jana Pawła II 12A/34, 18-300 Zambrów), w celu udziału w warsztatach programistycznych dla dzieci Devoxx4Kids.',

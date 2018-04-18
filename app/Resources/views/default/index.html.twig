@@ -94,6 +94,12 @@
                         {{ form_row(form.lastName) }}
                         {{ form_row(form.email) }}
                         {{ form_row(form.telephone) }}
+                        <div class="12u">
+                            <a href="{{ asset('regulamin.pdf') }}" class="button" target="_blank">Regulamin</a>
+                            <a href="{{ asset('regulamin_bezpieczenstwa.pdf') }}" class="button" target="_blank">Regulamin bezpieczeństwa</a>
+                            <a href="{{ asset('regulamin_rejestracji.pdf') }}" class="button" target="_blank">Regulamin rejestracji</a>
+                        </div>
+                        {{ form_row(form.allowConditions) }}
                         {{ form_row(form.allowTerms) }}
                         {{ form_row(form.allowMarketing) }}
                         {{ form_row(form.countChild) }}
