@@ -48,6 +48,7 @@ class DefaultController extends Controller
         }
         $memberRepository = $this->get('doctrine')->getRepository(Member::class);
         $countMember = $memberRepository->countMaxMemberInGroup($event);
+
         if ($stage->getCountRequiredMembers() <= $countMember) {
             return $this->render('default/index.html.twig', [
                 'event' => $event,

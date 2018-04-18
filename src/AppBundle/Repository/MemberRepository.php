@@ -40,7 +40,6 @@ class MemberRepository extends \Doctrine\ORM\EntityRepository
         } catch (NoResultException $e) {
             return 0;
         }
-
-        return $data['c'];
+        return $data;
     }
 }
