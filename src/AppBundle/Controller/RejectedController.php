@@ -7,52 +7,50 @@ use AppBundle\Entity\MemberGroup;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Validator\Constraints\Date;
 
 class RejectedController extends Controller
 {
     /**
      * @Route("/rejected/{token}", name="rejected")
-     * @ParamConverter("babysiter", class="AppBundle:Babysit", options={"mapping": {"token": "token"}})
+     * @ParamConverter("babysiter", class="AppBundle:Babysitter", options={"mapping": {"token": "token"}})
      * @param Babysitter $babysitter
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Babysitter $babysitter)
+    public function indexAction(Babysitter $babysitter,$token)
     {
         if(!$babysitter->getConfirmedMailAt()){
             $this->createNotFoundException();
         }
-//
-//        $connect = $this->get('doctrine')->getConnection();
-//        $connect->beginTransaction();
-//
-//        $babysitter->setToken(null);
-//        $groupRepository = $this->getDoctrine()->getRepository(MemberGroup::class);
-//        $confirmed = false;
-//        foreach ($babysitter->getMembers() as $member) {
-//            $countFreePlace = $groupRepository->countFreePlace($member->getGroup());
-//            if ($countFreePlace <= 0) {
-//                continue;
-//            }
-//
-//            $member->setExpectant(false);
-//            $confirmed = true;
-//        }
-//
-//        if ($confirmed) {
-//            $babysitter->setToken(md5(uniqid());
-//        }
-//        $connect->commit();
-//
-//        $message = $this->renderView('confirm/message.html.twig', ['members' => $babysitter->getMembers()]);
-//        if ($confirmed) {
-//            $this->sendEmail($babysitter, $this->renderView('confirm/email.html.twig', [
-//                'message' => $message,
-//                'token' => $babysitter->getToken()
-//            ]));
-//        }
-//
-//        return $this->render('confirm/index.html.twig', ['message' => $message]);
+
+        return $this->render('rejected/answer.html.twig',['members'=>$babysitter->getMembers(),'token'=>$token]);
     }
+
+    /**
+     * @Route("/rejected/confirm/{token}", name="rejected_confirm")
+     * @ParamConverter("babysiter", class="AppBundle:Babysitter", options={"mapping": {"token": "token"}})
+     * @param Babysitter $babysitter
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function confirmAction(Babysitter $babysitter)
+    {
+        if(!$babysitter->getConfirmedMailAt()){
+            $this->createNotFoundException();
+        }
+
+        $connect = $this->get('doctrine')->getConnection();
+        $connect->beginTransaction();
+        $babysitter->setToken(null);
+        foreach($babysitter->getMembers() as $member){
+            $member->setRejectedAt(new \DateTime());
+        }
+
+        $this->getDoctrine()->getManager()->flush();
+        $connect->commit();
+
+        return $this->render('rejected/confirm.html.twig');
+    }
+
 
     /**
      * @param Babysitter $babysitter

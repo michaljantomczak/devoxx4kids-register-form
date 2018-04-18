@@ -83,6 +83,13 @@ class Member
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="rejected_at", type="datetime",nullable=true)
+     */
+    private $rejectedAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
@@ -305,6 +312,24 @@ class Member
     public function isExpectant()
     {
         return $this->expectant;
+    }
+
+    /**
+     * @param \DateTime $rejectedAt
+     * @return Member
+     */
+    public function setRejectedAt($rejectedAt)
+    {
+        $this->rejectedAt = $rejectedAt;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getRejectedAt()
+    {
+        return $this->rejectedAt;
     }
 }
 

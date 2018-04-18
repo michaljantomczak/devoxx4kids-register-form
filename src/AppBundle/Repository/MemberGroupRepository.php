@@ -35,7 +35,7 @@ class MemberGroupRepository extends \Doctrine\ORM\EntityRepository
 
     public function countFreePlace(MemberGroup $group)
     {
-        $maxPlace=3; //fixme move to db
+        $maxPlace=26; //fixme move to db
         $query = $this->_em->createQuery('SELECT count(m) as c FROM AppBundle:Member m 
         WHERE m.group=:group AND m.expectant=FALSE');
         $query->setParameter('group', $group);
