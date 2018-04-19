@@ -25,15 +25,21 @@ class ConfirmController extends Controller
         $babysitter->setConfirmedMailAt(new \DateTime());
         $groupRepository = $this->getDoctrine()->getRepository(MemberGroup::class);
         $confirmed = false;
+        $groupCache = [];
         foreach ($babysitter->getMembers() as $member) {
-            $countFreePlace = $groupRepository->countFreePlace($member->getGroup());
-//            echo $countFreePlace ; exit;
+            if (isset($groupCache[$member->getGroup()->getId()])) {
+                $countFreePlace = $groupCache[$member->getGroup()->getId()];
+            } else {
+                $countFreePlace = $groupRepository->countFreePlace($member->getGroup());
+            }
+
             if ($countFreePlace <= 0) {
                 continue;
             }
 
             $member->setExpectant(false);
             $confirmed = true;
+            $groupCache[$member->getGroup()->getId()] = $countFreePlace - 1;
         }
 
         if ($confirmed) {
