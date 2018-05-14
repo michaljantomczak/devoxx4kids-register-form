@@ -34,10 +34,11 @@ class ConfirmController extends Controller
             }
 
             if ($countFreePlace <= 0) {
+                $member->setStatusExpectant();
                 continue;
             }
 
-            $member->setExpectant(false);
+            $member->setStatusConfirmed();
             $confirmed = true;
             $groupCache[$member->getGroup()->getId()] = $countFreePlace - 1;
         }

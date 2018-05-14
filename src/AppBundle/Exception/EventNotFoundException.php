@@ -9,7 +9,7 @@
 namespace AppBundle\Exception;
 
 
-class CityNotFoundException extends \Exception
+class EventNotFoundException extends \Exception
 {
 
     /**

@@ -6,6 +6,8 @@ use AppBundle\Entity\Event;
 use AppBundle\Entity\Member;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
  * MemberRepository
@@ -20,8 +22,26 @@ class MemberRepository extends \Doctrine\ORM\EntityRepository
      */
     public function findConfirm()
     {
-        $query = $this->_em->createQuery('SELECT m FROM AppBundle:Member m WHERE m.confirmedAt IS NOT null ');
+        $query = $this->_em->createQuery('SELECT m FROM AppBundle:Member m WHERE m.status= :status ');
+        $query->setParameter('status',Member::STATUS_CONFIRMED);
         return $query->getResult();
+    }
+
+    /**
+     * @param $hash
+     * @return Member
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function getByHash($hash)
+    {
+        $rsm = new ResultSetMappingBuilder($this->_em);
+        $rsm->addRootEntityFromClassMetadata(Member::class, 'm');
+        $query = $this->_em->createNativeQuery('SELECT m.* FROM members m WHERE status_id=:status and md5(id||\'\')= :hash', $rsm);
+        $query->setParameter('status',Member::STATUS_WAITING_ON_CONFIRM);
+        $query->setParameter('hash',$hash);
+        return $query->getSingleResult();
+
     }
 
     /**
@@ -30,7 +50,7 @@ class MemberRepository extends \Doctrine\ORM\EntityRepository
      */
     public function countMaxMemberInGroup(Event $event)
     {
-        $query = $this->_em->createQuery('SELECT count(m) as c FROM AppBundle:Member m JOIN m.babysitter b WHERE b.event=:event AND b.confirmedMailAt IS NOT NULL GROUP BY m.group ORDER BY c DESC');
+        $query = $this->_em->createQuery('SELECT count(m) as c FROM AppBundle:Member m JOIN m.babysitter b WHERE b.event=:event GROUP BY m.group ORDER BY c DESC');
         $query->setMaxResults(1);
         $query->setParameter('event',$event);
         try {

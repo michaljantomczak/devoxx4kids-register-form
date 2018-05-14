@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Member
 {
+    const STATUS_REGISTERED = 1;
+    const STATUS_EXPECTANT = 2;
+    const STATUS_REJECTED = 3;
+    const STATUS_CONFIRMED = 4;
+    const STATUS_WAITING_ON_CONFIRM = 5;
+    const STATUS_FINAL_CONFIRMED = 6;
     /**
      * @var int
      *
@@ -88,6 +94,13 @@ class Member
     private $rejectedAt;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="status_id", type="integer")
+     */
+    private $status;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -98,6 +111,7 @@ class Member
     {
         $this->setCreatedAt(new \DateTime());
         $this->setExpectant(true);
+        $this->status = self::STATUS_REGISTERED;
     }
 
     /**
@@ -117,7 +131,7 @@ class Member
      *
      * @return Member
      */
-    public function setBabysitter(Babysitter $babysitter=null)
+    public function setBabysitter(Babysitter $babysitter = null)
     {
         $this->babysitter = $babysitter;
 
@@ -213,7 +227,7 @@ class Member
      *
      * @return Member
      */
-    public function setTShirtSize(TShirtSize $tShirtSize=null)
+    public function setTShirtSize(TShirtSize $tShirtSize = null)
     {
         $this->tShirtSize = $tShirtSize;
 
@@ -315,21 +329,56 @@ class Member
     }
 
     /**
-     * @param \DateTime $rejectedAt
-     * @return Member
-     */
-    public function setRejectedAt($rejectedAt)
-    {
-        $this->rejectedAt = $rejectedAt;
-        return $this;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getRejectedAt()
     {
         return $this->rejectedAt;
+    }
+
+    /**
+     * @param int $status
+     * @return Member
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function setStatusWaitingOnConfirm()
+    {
+        $this->status = self::STATUS_WAITING_ON_CONFIRM;
+    }
+
+    public function setStatusFinalConfirmed()
+    {
+        $this->status = self::STATUS_FINAL_CONFIRMED;
+    }
+
+    public function setStatusExpectant()
+    {
+        $this->setExpectant(true);
+        $this->status = self::STATUS_EXPECTANT;
+    }
+
+    public function setStatusConfirmed()
+    {
+        $this->setExpectant(false);
+        $this->status = self::STATUS_CONFIRMED;
+    }
+
+    public function setStatusRejected()
+    {
+        $this->rejectedAt = new \DateTime();
     }
 }
 

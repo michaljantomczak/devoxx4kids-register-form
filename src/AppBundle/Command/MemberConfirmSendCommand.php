@@ -12,7 +12,7 @@ namespace AppBundle\Command;
 use AppBundle\Entity\Babysitter;
 use AppBundle\Entity\Event;
 use AppBundle\Entity\Member;
-use AppBundle\Exception\CityNotFoundException;
+use AppBundle\Exception\EventNotFoundException;
 use AppBundle\Repository\MemberRepository;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,55 +26,54 @@ class MemberConfirmSendCommand extends ContainerAwareCommand
     {
         $this->setName('member:confirm:send')
             ->setDescription('Email send to confirm members')
-            ->addArgument('city slug',InputArgument::OPTIONAL,'Send only to members from city.');
+            ->addArgument('event', InputArgument::OPTIONAL, 'Send only to members from event.');
     }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
+     * @throws EventNotFoundException
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $city=null;
-        if($input->hasArgument('city')){
-            $city=$this->getCity($input->getArgument('city'));
+        $city = null;
+        if ($input->hasArgument('city')) {
+            $city = $this->getEvent($input->getArgument('city'));
         }
-        $mails=$this->getMessages($city);
 
-        foreach($mails as $mail){
+        $members = $this->getMessages($city);
+
+        foreach ($members as $member) {
             /**
              * @var Babysitter $babysitter
              */
-            $babysitter=$mail['babysitter'];
-            $this->sendMail($babysitter->getEmail(),$mail['members']);
+            $babysitter = $member->getBabysitter();
+            $this->sendMail($babysitter->getEmail(), $member);
         }
     }
 
     /**
-     * @param $city
-     * @return mixed[]
+     * @param $event
+     * @return Member[]
      */
-    private function getMessages(Event $city=null)
+    private function getMessages(Event $event = null)
     {
-        $results=[];
-        $em=$this->getContainer()->get('doctrine')->getManager();
+        $results = [];
+        $em = $this->getContainer()->get('doctrine')->getManager();
         /**
          * @var MemberRepository $memberRepository
          */
-        $memberRepository=$em->getRepository(Member::class);
+        $memberRepository = $em->getRepository(Member::class);
 
-        $members=$memberRepository->findConfirm();
-        foreach($members as $member){
-            $babysitter=$member->getBabysitter();
-            if(null!==$city && $babysitter->getEvent()!==$city){
+        $members = $memberRepository->findConfirm();
+        foreach ($members as $member) {
+            $babysitter = $member->getBabysitter();
+            if (null !== $event && $babysitter->getEvent() !== $event) {
                 continue;
             }
+            $results[] = $member;
 
-            if(!isset($results[$babysitter->getId()])){
-                $results[$babysitter->getid()]=['babysitter'=>$babysitter,'members'=>[]];
-            }
-            $results[$babysitter->getId()]['members'][]=$member;
         }
 
         return $results;
@@ -83,30 +82,33 @@ class MemberConfirmSendCommand extends ContainerAwareCommand
     /**
      * @param string $slug
      * @return Event
-     * @throws CityNotFoundException
+     * @throws EventNotFoundException
      */
-    private function getCity($slug)
+    private function getEvent($slug)
     {
-        $em=$this->getContainer()->get('doctrine')->getManager();
-        $cityRepository=$em->getRepository(Event::class);
-        $city=$cityRepository->findOneBy(['slug'=>$slug]);
-        if(!$city){
-            throw new CityNotFoundException($slug);
+
+        $em = $this->getContainer()->get('doctrine')->getManager();
+        $cityRepository = $em->getRepository(Event::class);
+        $event = $cityRepository->findOneBy(['slug' => $slug]);
+        if (!$event) {
+            throw new EventNotFoundException($slug);
         }
 
-        return $city;
+        return $event;
     }
 
-    private function sendMail($mail,$members)
+    private function sendMail($mail, Member $member)
     {
-        $textMessage=$this->getContainer()->get('twig')->render('mail/confirm.txt.twig',['members'=>$members]);
+        $textMessage = $this->getContainer()->get('twig')->render('mail/confirm.html.twig', ['member' => $member,'hash'=>md5($member->getId())]);
         $message = \Swift_Message::newInstance()
-            ->setSubject('Devoxx4Kids 2017 - potwierdzenie uczestnictwa') //FIXME add translations
+            ->setSubject('Devoxx4Kids 2018 - potwierdzenie uczestnictwa')//FIXME add translations
             ->setFrom($this->getContainer()->getParameter('mailer_from'))
             ->setTo($mail)
             ->setBody($textMessage,
-                'text/plain'
+                'text/html'
             );
         $this->getContainer()->get('mailer')->send($message);
+        $member->setStatusWaitingOnConfirm();
+        $this->getContainer()->get('doctrine')->getManager()->flush();
     }
 }
