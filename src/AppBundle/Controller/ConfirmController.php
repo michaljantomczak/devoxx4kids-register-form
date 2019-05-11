@@ -67,7 +67,7 @@ class ConfirmController extends Controller
     private function sendEmail(Babysitter $babysitter, $message)
     {
         $message = \Swift_Message::newInstance()
-            ->setSubject('Rejestracja Devoxx4kids')//FIXME add translations
+            ->setSubject('Rejestracja Czarodzieje Kodu')//FIXME add translations
             ->setFrom($this->getParameter('mailer_from'))
             ->setTo($babysitter->getEmail())
             ->setBody($message,

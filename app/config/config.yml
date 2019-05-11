@@ -73,7 +73,7 @@ swiftmailer:
     encryption: '%mailer_encryption%'
     spool:
         type: file
-        path: '%kernel.root_dir%/spool'
+        path: '%kernel.root_dir%/../var/spool'
 
 assetic:
     debug:          '%kernel.debug%'

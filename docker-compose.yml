@@ -1,6 +1,7 @@
 version: "3"
 services:
   httpd:
+    privileged: true
     build: docker/httpd
     ports:
       - 2057:80

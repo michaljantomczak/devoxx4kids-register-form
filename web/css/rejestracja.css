@@ -1284,7 +1284,7 @@ header.major {
   -webkit-transition: background-color 0.2s ease;
   -ms-transition: background-color 0.2s ease;
   transition: background-color 0.2s ease;
-  background: #347ccf;
+  background: #2642a5;
   height: 3em;
   left: 0;
   line-height: 3em;
@@ -2183,7 +2183,7 @@ input {
 
 #footer {
   padding: 6em 0 4em 0 ;
-  background-color: #2a68b0;
+  background-color: #2642a5;
   text-align: center; }
   #footer .icons {
     font-size: 1.25em; }

@@ -101,7 +101,7 @@ class MemberConfirmSendCommand extends ContainerAwareCommand
     {
         $textMessage = $this->getContainer()->get('twig')->render('mail/confirm.html.twig', ['member' => $member,'hash'=>md5($member->getId())]);
         $message = \Swift_Message::newInstance()
-            ->setSubject('Devoxx4Kids 2018 - potwierdzenie uczestnictwa')//FIXME add translations
+            ->setSubject('Czarodzieje Kodu 2019 - potwierdzenie uczestnictwa')//FIXME add translations
             ->setFrom($this->getContainer()->getParameter('mailer_from'))
             ->setTo($mail)
             ->setBody($textMessage,

@@ -100,7 +100,7 @@ class MemberRejectedSendCommand extends ContainerAwareCommand
     {
         $textMessage=$this->getContainer()->get('twig')->render('mail/rejected.txt.twig',['members'=>$members]);
         $message = \Swift_Message::newInstance()
-            ->setSubject('Rejestracja Devoxx4kids') //FIXME add translations
+            ->setSubject('Rejestracja Czarodzieje Kodu') //FIXME add translations
             ->setFrom($this->getContainer()->getParameter('mailer_from'))
             ->setTo($mail)
             ->setBody($textMessage,

@@ -72,7 +72,7 @@ class BabysitterType extends AbstractType
                 ]
             ])
             ->add('allowTerms',null,[
-                'label'=>'Wyrażam zgodę na przetwarzanie moich danych osobowych przez Stowarzyszenie Polska Grupa Użytkowników Pythona, ul. Madalińskiego 106, 02-506 Warszawa, w celu udziału w warsztatach programistycznych dla dzieci Devoxx4Kids.',
+                'label'=>'Wyrażam zgodę na przetwarzanie moich danych osobowych przez Stowarzyszenie Polska Grupa Użytkowników Pythona, ul. Madalińskiego 106, 02-506 Warszawa, w celu udziału w warsztatach programistycznych dla dzieci Czarodzieje Kodu.',
                 'required'=>true,
                 'constraints'=>[
                     new NotBlank(),
