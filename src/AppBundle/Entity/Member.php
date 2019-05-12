@@ -379,6 +379,7 @@ class Member
     public function setStatusRejected()
     {
         $this->rejectedAt = new \DateTime();
+        $this->status = self::STATUS_REJECTED;
     }
 }
 

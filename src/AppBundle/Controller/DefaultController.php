@@ -8,6 +8,7 @@ use AppBundle\Entity\Member;
 use AppBundle\Entity\MemberGroup;
 use AppBundle\Entity\Stage;
 use AppBundle\Form\BabysitterType;
+use AppBundle\Repository\MemberRepository;
 use Doctrine\ORM\NoResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -46,6 +47,9 @@ class DefaultController extends Controller
                 'active' => false,
             ]);
         }
+        /**
+         * @var MemberRepository $memberRepository
+         */
         $memberRepository = $this->get('doctrine')->getRepository(Member::class);
         $countMember = $memberRepository->countMaxMemberInGroup($event);
 

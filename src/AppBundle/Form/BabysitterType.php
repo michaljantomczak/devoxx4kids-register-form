@@ -72,14 +72,14 @@ class BabysitterType extends AbstractType
                 ]
             ])
             ->add('allowTerms',null,[
-                'label'=>'Wyrażam zgodę na przetwarzanie moich danych osobowych przez Stowarzyszenie Polska Grupa Użytkowników Pythona, ul. Madalińskiego 106, 02-506 Warszawa, w celu udziału w warsztatach programistycznych dla dzieci Czarodzieje Kodu.',
+                'label'=>'Wyrażam zgodę na przetwarzanie moich danych osobowych przez Fundacja Inspirator, os. Dębina 5/21, 61-450 Poznań, w celu udziału w warsztatach programistycznych dla dzieci Czarodzieje Kodu.',
                 'required'=>true,
                 'constraints'=>[
                     new NotBlank(),
                 ]
             ])
             ->add('allowMarketing',null,[
-                'label'=>'Wyrażam zgodę na przesyłanie mi przez Stowarzyszenie Polska Grupa Użytkowników Pythona, ul. Madalińskiego 106, 02-506 Warszawa za pomocą środków komunikacji elektronicznej informacji o przyszłych warsztatach (np. newsletterów).',
+                'label'=>'Wyrażam zgodę na przesyłanie mi przez Fundacja Inspirator, os. Dębina 5/21, 61-450 Poznań za pomocą środków komunikacji elektronicznej informacji o przyszłych warsztatach (np. newsletterów).',
             ])
             ->add('countChild',ChoiceType::class,[
                 'placeholder'=>'Select...',

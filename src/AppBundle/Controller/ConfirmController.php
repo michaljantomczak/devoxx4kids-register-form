@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Babysitter;
 use AppBundle\Entity\MemberGroup;
+use AppBundle\Repository\MemberGroupRepository;
+use Claudo\Semaphore;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,14 +17,42 @@ class ConfirmController extends Controller
      * @ParamConverter("babysiter", class="AppBundle:Babysitter", options={"mapping": {"token": "token"}})
      * @param Babysitter $babysitter
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
     public function indexAction(Babysitter $babysitter)
     {
-        $connect = $this->get('doctrine')->getConnection();
+        $semaphore=new Semaphore('confirm');
+        return $semaphore->synchronize(function (Semaphore $semaphore=null) use ($babysitter){
+            return $this->execute($babysitter);
+        });
+    }
+
+    /**
+     * @param Babysitter $babysitter
+     * @param string $message
+     */
+    private function sendEmail(Babysitter $babysitter, $message)
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Rejestracja Czarodzieje Kodu')//FIXME add translations
+            ->setFrom($this->getParameter('mailer_from'))
+            ->setTo($babysitter->getEmail())
+            ->setBody($message,
+                'text/html'
+            );
+        $this->get('mailer')->send($message);
+    }
+
+    private function execute(Babysitter $babysitter)
+    {
+        $connect = $this->getDoctrine()->getConnection();
         $connect->beginTransaction();
 
         $babysitter->setToken(null);
         $babysitter->setConfirmedMailAt(new \DateTime());
+        /**
+         * @var MemberGroupRepository $groupRepository
+         */
         $groupRepository = $this->getDoctrine()->getRepository(MemberGroup::class);
         $confirmed = false;
         $groupCache = [];
@@ -58,22 +88,6 @@ class ConfirmController extends Controller
         }
 
         return $this->render('confirm/index.html.twig', ['message' => $message]);
-    }
-
-    /**
-     * @param Babysitter $babysitter
-     * @param string $message
-     */
-    private function sendEmail(Babysitter $babysitter, $message)
-    {
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Rejestracja Czarodzieje Kodu')//FIXME add translations
-            ->setFrom($this->getParameter('mailer_from'))
-            ->setTo($babysitter->getEmail())
-            ->setBody($message,
-                'text/html'
-            );
-        $this->get('mailer')->send($message);
     }
 
 }
